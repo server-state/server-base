@@ -1,4 +1,4 @@
-const nodeModuleName = require('../src/module-name');
+const nodeModuleName = require('../src/util/module-name');
 
 describe('module name resolution', () => {
 	it('should correctly convert a raw module name', () => {

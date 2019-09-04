@@ -2,10 +2,11 @@
   "name": "@server-state/server-base",
   "version": "0.1.0",
   "description": "Server-side (NodeJS based) implementation of the architecture (no modules included)",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint .",
+    "lint": "eslint ./src/",
+    "build": "webpack --config webpack.config.js --mode production",
     "start": "node ./"
   },
   "repository": {
@@ -32,7 +33,9 @@
   },
   "homepage": "https://github.com/server-state/server-base#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
   },
   "devDependencies": {
     "eslint": "^6.3.0",
