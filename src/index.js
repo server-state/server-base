@@ -12,7 +12,7 @@ module.exports = class ServerStateBase {
 	 */
 	constructor() {
 		this.modules = {};
-    this.args = {};
+		this.args = {};
 	}
 
 	/**
@@ -26,8 +26,8 @@ module.exports = class ServerStateBase {
 			console.error(`Module already used: ${name}. Skipping`);
 		else {
 			this.modules[name] = fn;
-      this.args[name] = args;
-    }
+			this.args[name] = options;
+		}
 	}
 
 	/**
