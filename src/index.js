@@ -19,7 +19,7 @@ module.exports = class ServerStateBase {
      * Add module to server for json output.
      * @param {string} name Module name (without prefixes)
      * @param {function} fn
-	 * @param {*} [options=undefined]
+     * @param {*} [options=undefined]
      */
     addModule(name, fn, options) {
         if (this.modules[name])
