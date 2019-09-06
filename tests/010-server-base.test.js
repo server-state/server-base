@@ -16,7 +16,7 @@ describe('server state class', () => {
         beforeEach(() => {
             s = new ServerState();
             s.addModule('a', () => 'a');
-            s.addModule('b', () => 'b');
+            s.addModule('b', (b) => b, 'b');
             s.addModule('c', () => new Promise(resolve =>
                 setTimeout(() => resolve('c'), 100)
             ));
@@ -45,7 +45,7 @@ describe('server state class', () => {
                         routes[route] = cb;
                     },
                     _run: (route) => {
-                        return routes[route](req,res);
+                        return routes[route](req, res);
                     }
                 }
 
@@ -65,22 +65,24 @@ describe('server state class', () => {
                 done();
             });
 
-            it('should correctly setup route for synchronous modules a and b', async (done) => {
+            it('should correctly setup route for simple synchronous module a', async (done) => {
                 const resA = JSON.parse(await expressAppMock._run('/api/v1/a'));
-                const resB = JSON.parse(await expressAppMock._run('/api/v1/b'));
-
                 expect(resA).toBe('a');
-                expect(resB).toBe('b');
-
                 done();
             });
 
             it('should correctly setup route for asynchronous module c', async (done) => {
                 const resC = JSON.parse(await expressAppMock._run('/api/v1/c'));
-
                 expect(resC).toBe('c');
-
                 done();
+            });
+
+            describe('passing options to modules', () => {
+                it('should correctly pass options to the module if specified', async (done) => {
+                    const resB = JSON.parse(await expressAppMock._run('/api/v1/b'));
+                    expect(resB).toBe('b');
+                    done();
+                })
             })
         });
 
