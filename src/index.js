@@ -35,7 +35,7 @@ module.exports = class ServerStateBase {
      * @param {Express} app
      */
     init(app) {
-    // Apply modules
+        // Apply modules
         for (let module in this.modules) {
             if (Object.prototype.hasOwnProperty.call(this.modules, module))
                 app.get('/api/v1/' + module, async (req, res) => {
