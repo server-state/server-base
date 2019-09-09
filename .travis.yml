@@ -6,3 +6,6 @@ script:
   - npm run lint
   - npm run build
   - npm test
+
+notifications:
+  slack: serverstate:PcPgLd43m8TKiXrxfHb1mKff
