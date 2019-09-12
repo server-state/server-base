@@ -1,3 +1,5 @@
+const logger = require('./lib/logger');
+
 /**
  * @module '@server-state/server-base'
  */
@@ -10,9 +12,10 @@ module.exports = class ServerStateBase {
     /**
      * Create a new instance of `ServerStateBase` that will, upon calling `init(app)`, add the relevant API endpoints to the express app
      */
-    constructor() {
+    constructor(config) {
         this.modules = {};
         this.args = {};
+        this.config = config;
     }
 
     /**
@@ -23,7 +26,7 @@ module.exports = class ServerStateBase {
      */
     addModule(name, fn, options) {
         if (this.modules[name])
-            console.error(`Module already used: ${name}. Skipping`);
+            logger.warn(`Module already used: ${name}. Skipping`);
         else {
             this.modules[name] = fn;
             this.args[name] = options;
@@ -39,7 +42,15 @@ module.exports = class ServerStateBase {
         for (let module in this.modules) {
             if (Object.prototype.hasOwnProperty.call(this.modules, module))
                 app.get('/api/v1/' + module, async (req, res) => {
-                    return res.json(await this.modules[module](this.args[module]));
+                    try {
+                        const result = await this.modules[module](this.args[module]);
+                        return res.json(result);
+                    } catch (e) {
+                        logger.error(module, e.message);
+                        res.status(500).send(
+                            `An error occurred while running the module ${module}. Please check your server logs or contact your administrator.`
+                        );
+                    }
                 });
         }
 
@@ -48,8 +59,17 @@ module.exports = class ServerStateBase {
             let result = {};
 
             for (let module in this.modules) {
-                if (Object.prototype.hasOwnProperty.call(this.modules, module))
-                    result[module] = await this.modules[module](this.args[module]);
+                if (Object.prototype.hasOwnProperty.call(this.modules, module)) {
+                    try {
+                        result[module] = await this.modules[module](this.args[module]);
+                    } catch (e) {
+                        logger.error(module, e.message);
+                        res.status(500).send(
+                            `An error occurred while running the module ${module}. Please check your server logs or `
+                            + 'contact your administrator.'
+                        );
+                    }
+                }
             }
 
             return res.json(result);

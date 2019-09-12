@@ -105,9 +105,9 @@ describe('server state class', () => {
 
         it('should fail to add a module a second time', () => {
             s.addModule('test', () => true);
-            console.error = jest.fn();
+            console.warn = jest.fn();
             s.addModule('test', () => true);
-            expect(console.error).toHaveBeenCalled();
+            expect(console.warn).toHaveBeenCalled();
         });
     });
 });

@@ -2,7 +2,7 @@
   "name": "@server-state/server-base",
   "version": "0.1.0",
   "description": "Server-side (NodeJS based) implementation of the architecture (no modules included)",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "test": "jest",
     "lint": "eslint ./src/ ./tests/",
@@ -12,6 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/server-state/server-base.git"
   },
+  "types": "index.d.ts",
   "keywords": [
     "nodejs",
     "server",
