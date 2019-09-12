@@ -12,9 +12,10 @@ module.exports = class ServerStateBase {
     /**
      * Create a new instance of `ServerStateBase` that will, upon calling `init(app)`, add the relevant API endpoints to the express app
      */
-    constructor() {
+    constructor(config) {
         this.modules = {};
         this.args = {};
+        this.config = config;
     }
 
     /**

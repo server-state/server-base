@@ -1,10 +1,24 @@
-const logToConsole = true;
-const logToFile = false;
+const fs = require('fs');
+
+let config = {
+    logToConsole: true,
+    logToFile: false,
+    logFilePath: './server-state.log'
+};
+
+const logLevelNames = [
+    'LOG  ',
+    'WARN ',
+    '',
+    '',
+    '',
+    'ERROR',
+];
 
 function logPerConfig(type, ...args) {
     let message;
 
-    message = '[' + new Date().toISOString() + '] ';
+    message = '[' + new Date().toISOString() + '] ' + logLevelNames[type] + ' ';
     message += args.reduce(
         (
             (previousValue, currentValue) => previousValue + ' ' + currentValue
@@ -15,8 +29,8 @@ function logPerConfig(type, ...args) {
         )
     );
 
-    logToConsole ? logConsole(type, message) : null;
-    logToFile ? logFile(type, message) : null;
+    config.logToConsole ? logConsole(type, message) : null;
+    config.logToFile ? logFile(type, message) : null;
 }
 
 function logConsole(type, message) {
@@ -33,9 +47,11 @@ function logConsole(type, message) {
 }
 
 function logFile(type, message) {
-    //TODO: Implement logging to file
-    type;
-    message;
+    if (!fs.existsSync(config.logFilePath)) {
+        fs.writeFileSync(config.logFilePath, 'Log file initialized on ' + new Date().toISOString());
+    }
+
+    fs.appendFileSync(config.logFilePath, '\n' + message);
 }
 
 module.exports = {
@@ -48,4 +64,7 @@ module.exports = {
     error: (...args) => {
         return logPerConfig(5, ...args);
     },
+    _configure: (passedConfig) => {
+        config = Object.assign(config, passedConfig);
+    }
 };
