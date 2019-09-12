@@ -1,7 +1,7 @@
 const logToConsole = true;
 const logToFile = false;
 
-async function logPerConfig(type, ...args) {
+function logPerConfig(type, ...args) {
     let message;
 
     message = '[' + new Date().toISOString() + '] ';
@@ -15,11 +15,11 @@ async function logPerConfig(type, ...args) {
         )
     );
 
-    logToConsole ? await logConsole(type, message) : null;
-    logToFile ? await logFile(type, message) : null;
+    logToConsole ? logConsole(type, message) : null;
+    logToFile ? logFile(type, message) : null;
 }
 
-async function logConsole(type, message) {
+function logConsole(type, message) {
     switch (type) {
     case 0:
         console.log(message);
@@ -32,7 +32,7 @@ async function logConsole(type, message) {
     }
 }
 
-async function logFile(type, message) {
+function logFile(type, message) {
     //TODO: Implement logging to file
     type;
     message;

@@ -45,7 +45,7 @@ module.exports = class ServerStateBase {
                         const result = await this.modules[module](this.args[module]);
                         return res.json(result);
                     } catch (e) {
-                        await logger.error(module, e.message);
+                        logger.error(module, e.message);
                         res.status(500).send(
                             `An error occurred while running the module ${module}. Please check your server logs or contact your administrator.`
                         );
@@ -62,9 +62,10 @@ module.exports = class ServerStateBase {
                     try {
                         result[module] = await this.modules[module](this.args[module]);
                     } catch (e) {
-                        await logger.error(module, e.message);
+                        logger.error(module, e.message);
                         res.status(500).send(
-                            `An error occurred while running the module ${module}. Please check your server logs or contact your administrator.`
+                            `An error occurred while running the module ${module}. Please check your server logs or `
+                            + 'contact your administrator.'
                         );
                     }
                 }
