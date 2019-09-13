@@ -1,0 +1,9 @@
+tests
+src
+jest.config.js
+.eslintrc.js
+webpack.config.js
+.travis.yml
+.github
+.idea
+server-state.log
