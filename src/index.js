@@ -16,6 +16,7 @@ module.exports = class ServerStateBase {
         this.modules = {};
         this.args = {};
         this.config = config;
+        logger._configure(config);
     }
 
     /**
