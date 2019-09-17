@@ -1,7 +1,7 @@
 # server-base
 [![Build Status](https://travis-ci.com/server-state/server-base.svg?branch=master)](https://travis-ci.com/server-state/server-base)
-![GitHub](https://img.shields.io/github/license/server-state/server-base)
-![npm (scoped)](https://img.shields.io/npm/v/@server-state/linux-raid-module)
+[![npm version](https://badge.fury.io/js/%40server-state%2Fserver-base.svg)](https://badge.fury.io/js/%40server-state%2Fserver-base)
+![npm (scoped)](https://img.shields.io/npm/v/@server-state/server-base)
 
 Server-side (NodeJS based) implementation of the server-base architecture (no modules included).
 
