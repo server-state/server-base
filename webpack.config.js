@@ -2,7 +2,6 @@ module.exports = {
     entry: './src/index.js',
     target: 'node',
     module: {
-        exprContextCritical: false
     },
     output: {
         path: __dirname,
