@@ -1,6 +1,6 @@
 {
   "name": "@server-state/server-base",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Server-side (NodeJS based) implementation of the architecture (no modules included)",
   "main": "index.js",
   "scripts": {
