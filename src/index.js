@@ -11,7 +11,7 @@ const logger = require('./lib/logger');
 module.exports = class ServerStateBase {
     /**
      * Create a new instance of `ServerStateBase` that will, upon calling `init(app)`, add the relevant API endpoints to the express app
-     * @param {Object<{isAuthorized?: function}>} config
+     * @param {Object<{isAuthorized?: function}>} [config]
      */
     constructor(config) {
         this.modules = {};

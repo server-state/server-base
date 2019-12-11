@@ -16,7 +16,7 @@ describe('server state class', () => {
         beforeEach(() => {
             s = new ServerState();
             s.addModule('a', () => 'a');
-            s.addModule('b', (b) => b, 'b');
+            s.addModule('b', (b) => b, [], 'b');
             s.addModule('c', () => new Promise(resolve =>
                 setTimeout(() => resolve('c'), 100)
             ));
