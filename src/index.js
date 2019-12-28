@@ -57,7 +57,7 @@ module.exports = class ServerStateBase {
                         return res.json(result);
                     } catch (e) {
                         logger.error(module, e.message);
-                        res.status(500).send(
+                        return res.status(500).send(
                             `An error occurred while running the module ${module}. Please check your server logs or contact your administrator.`
                         );
                     }

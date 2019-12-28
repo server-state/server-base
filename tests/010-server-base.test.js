@@ -110,4 +110,75 @@ describe('server state class', () => {
             expect(console.warn).toHaveBeenCalled();
         });
     });
+
+    describe('authentication system', () => {
+        let expressAppMock;
+
+        beforeAll(() => {
+            expressAppMock = require('./express.mock')();
+
+            const sersta = new ServerState({
+                isAuthorized: (req, authorizedGroups) => {
+                    return (authorizedGroups.includes(req.user));
+                }
+            });
+            sersta.addModule('1', () => 1, ['admin']);
+            sersta.addModule('2', () => 2, []);
+            sersta.addModule('3', () => 3, ['admin', 'guest']);
+            sersta.init(expressAppMock);
+        });
+
+        it('should allow access for authorized users', async done => {
+            expect(await expressAppMock.__executeGET('/api/v1/1', 'admin')).toStrictEqual({data: '1', status: 200});
+            expect(await expressAppMock.__executeGET('/api/v1/3', 'admin')).toStrictEqual({data: '3', status: 200});
+
+            done();
+        });
+
+        it('should deny access for unauthorized users', async done => {
+            expect(await expressAppMock.__executeGET('/api/v1/1', 'guest')).toHaveProperty('status', 403);
+            done();
+        });
+
+        it('should deny access when no authorizedGroups are passed', async done => {
+            expect(await expressAppMock.__executeGET('/api/v1/2', 'admin')).toHaveProperty('status', 403);
+            done();
+        });
+
+        it('should only show authorized modules for /api/v1/all', async done => {
+            const adminResults = await expressAppMock.__executeGET('/api/v1/all', 'admin');
+            const guestResults = await expressAppMock.__executeGET('/api/v1/all', 'guest');
+
+            expect(adminResults).toHaveProperty('status', 200);
+            expect(guestResults).toHaveProperty('status', 200);
+
+            expect(Object.keys(JSON.parse(adminResults.data))).toHaveLength(2);
+
+            done();
+        });
+    });
+
+    describe('malconfigured modules / errors in modules', () => {
+        let expressAppMock;
+
+        beforeAll(() => {
+            expressAppMock = require('./express.mock')();
+            const sersta = new ServerState({logToConsole: false, logToFile: false});
+            sersta.addModule('1', () => {throw new Error('A willingly malconfigured module');});
+            sersta.addModule('2', () => 2);
+            sersta.init(expressAppMock);
+        });
+
+        it('should send HTTP 500 for the malconfigured module', async () => {
+            expect(await expressAppMock.__executeGET('/api/v1/1')).toHaveProperty('status', 500);
+        });
+
+        it('should still send 200 for the working module', async () => {
+            expect(await expressAppMock.__executeGET('/api/v1/2')).toHaveProperty('status', 200);
+        });
+
+        it('should send HTTP 500 for the /api/all endpoint', async () => {
+            expect(await expressAppMock.__executeGET('/api/v1/all')).toHaveProperty('status', 500);
+        });
+    });
 });
