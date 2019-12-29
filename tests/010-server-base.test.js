@@ -28,7 +28,7 @@ describe('server state class', () => {
 
         it('should correctly create all routes', () => {
             s.init(expressAppMock);
-            expect(expressAppMock.get).toHaveBeenCalledTimes(4);
+            expect(expressAppMock.get).toHaveBeenCalledTimes(7);
         });
 
         describe('route `all`', () => {
@@ -126,6 +126,25 @@ describe('server state class', () => {
             sersta.addModule('2', () => 2, []);
             sersta.addModule('3', () => 3, ['admin', 'guest']);
             sersta.init(expressAppMock);
+        });
+
+        it('should display the correct groups in the /[module]/permissions path', async done => {
+            expect(await expressAppMock.__executeGET('/api/v1/1/permissions', 'admin')).toStrictEqual({
+                data: JSON.stringify(['admin']),
+                status: 200
+            });
+            expect(await expressAppMock.__executeGET('/api/v1/3/permissions', 'admin')).toStrictEqual({
+                data: JSON.stringify(['admin', 'guest']),
+                status: 200
+            });
+
+            done();
+        });
+
+        it('shouldn\'t display the correct groups in the /[module]/permissions for unauthorized users', async done => {
+            expect(await expressAppMock.__executeGET('/api/v1/1/permissions', 'anonymous')).toHaveProperty('status', 403);
+
+            done();
         });
 
         it('should allow access for authorized users', async done => {

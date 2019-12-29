@@ -45,7 +45,16 @@ module.exports = class ServerStateBase {
     init(app) {
         // Apply modules
         for (let module in this.modules) {
-            if (Object.prototype.hasOwnProperty.call(this.modules, module))
+            if (Object.prototype.hasOwnProperty.call(this.modules, module)) {
+                app.get(`/api/v1/${module}/permissions`, async (req, res) => {
+                    if (this.config.isAuthorized && typeof this.config.isAuthorized === 'function') {
+                        if (!this.config.isAuthorized(req, this.authorizedGroups[module])) {
+                            return res.status(403).send();
+                        }
+                    }
+                    const result = await this.authorizedGroups[module];
+                    return res.json(result);
+                });
                 app.get('/api/v1/' + module, async (req, res) => {
                     try {
                         if (this.config.isAuthorized && typeof this.config.isAuthorized === 'function') {
@@ -62,6 +71,7 @@ module.exports = class ServerStateBase {
                         );
                     }
                 });
+            }
         }
 
         // Pull requests from all modules and send them
