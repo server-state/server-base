@@ -42,7 +42,7 @@ declare class ServerBase {
      * @param authorizedGroups Groups authorized to access this module
      * @param moduleOptions Options getting passed to the SMF as first argument. Can be any type, but usually will be a configuration object.
      */
-    addModule(name: string, moduleFunction: (options: any) => any | Promise<any>, authorizedGroups: string[], moduleOptions?: any)
+    addModule(name: string, moduleFunction: (options: any) => any | Promise<any>, authorizedGroups?: string[], moduleOptions?: any)
 
     /**
      * Attaches the server base to the passed Express `app`, handling routes under `/api/` there.
