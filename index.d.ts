@@ -25,16 +25,24 @@ declare class ServerBase {
          * Path to the file in which messages should get logged (in case `logToFile` is `true`).
          * @default './server-state.log'
          */
-        logFilePath?: string
+        logFilePath?: string,
+        /**
+         * A callback that checks whether the current user (of the request) is authorized to access the resource
+         * @param req The HTTP request to evaluate tokens or other forms of authentication
+         * @param authorizedGroups The groups that have the authorization to access the resource
+         * @return Is authorized? In other words: Is there an intersection between the groups the user belongs to and `authorizedGroups`?
+         */
+        isAuthorized?: (req: Express.Request, authorizedGroups: string[]) => boolean,
     });
 
     /**
      * Adds a server module function (as specified in https://github.com/server-state/specs/blob/master/terminology/server-module-function.md) under a given name resulting in a server module function (as specified in https://github.com/server-state/specs/blob/master/terminology/server-module.md), making it available under `/api/v1/[name]`.
      * @param name The name of the module. Must be unique (i.e., not registered before). Otherwise, the module will be skipped and an error message logged.
      * @param moduleFunction The function defining the module (SMF). Must either return a Promise for or a JSON serializable value or throw with an error message in case of failure (resulting in the error message getting logged and a `HTTP 500` response).
+     * @param authorizedGroups Groups authorized to access this module
      * @param moduleOptions Options getting passed to the SMF as first argument. Can be any type, but usually will be a configuration object.
      */
-    addModule(name: string, moduleFunction: (options: any) => any | Promise<any>, moduleOptions?: any)
+    addModule(name: string, moduleFunction: (options: any) => any | Promise<any>, authorizedGroups?: string[], moduleOptions?: any)
 
     /**
      * Attaches the server base to the passed Express `app`, handling routes under `/api/` there.
