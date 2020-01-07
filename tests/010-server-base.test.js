@@ -193,6 +193,7 @@ describe('server state class', () => {
             expect(guestResults).toHaveProperty('status', 200);
 
             expect(Object.keys(JSON.parse(adminResults.data))).toHaveLength(2);
+            expect(Object.keys(JSON.parse(guestResults.data))).toHaveLength(1);
 
             done();
         });
