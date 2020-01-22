@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/express": "^4.17.1",
     "eslint": "^6.3.0",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.7"
   }
