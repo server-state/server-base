@@ -5,7 +5,7 @@
 
 Server-side (NodeJS based) implementation of the server-base architecture (no modules included).
 
-It manages server modules and can get attached to an express app, where it creates routes under `/api/v1/`, as specified in https://github.com/server-state/specs/blob/master/api/routes.md.
+It manages server modules and can get attached to an express app, where it creates routes under `/api/v1/`, as specified in https://specs.server-state.tech/#/api/server-base.
 
 ### Example
 ```js
@@ -19,7 +19,7 @@ const server = new ServerState({
 });
 
 // Add module under name 'raw'. Will add it to /api/v1/all and create /api/v1/raw
-server.addModule('raw', require('@server-state/raw-module'), [
+server.addModule('raw', require('@server-state/raw-module'), ['guest'], [
 	'ls',
 	'whoami'
 ]);
