@@ -21,12 +21,9 @@ function logPerConfig(type, ...args) {
     message = '[' + new Date().toISOString() + '] ' + logLevelNames[type] + ' ';
     message += args.reduce(
         (
-            (previousValue, currentValue) => previousValue + ' ' + currentValue
+            (previousValue, currentValue) => previousValue + ' ' + currentValue.toString()
         ),
-        '',
-        args.map(
-            arg => arg.toString()
-        )
+        ''
     );
 
     config.logToConsole ? logConsole(type, message) : null;
