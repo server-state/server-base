@@ -40,6 +40,6 @@
     "eslint": "^7.1.0",
     "jest": "^26.0.0",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7"
+    "webpack-cli": "^4.0.0"
   }
 }
